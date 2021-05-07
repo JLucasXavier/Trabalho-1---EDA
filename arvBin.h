@@ -1,4 +1,3 @@
-
 typedef struct arvBin {
     char info;
     struct arvBin* esq;
