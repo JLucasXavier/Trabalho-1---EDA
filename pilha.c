@@ -45,13 +45,13 @@ int vazia_pilha(Pilha *p){
 
 char * pop_pilha(Pilha *p){
 	Dado *d;
-	char a[2];
+	char *a;
 	if (vazia_pilha(p) == 1)
 	{
 		exit(1);
 	}
 	d = p->topo;
-	strcpy(a, d->a);
+	a = d->a;
 	p->topo = d->prox;
 	free(d);
 	return a;
@@ -61,10 +61,13 @@ int main(void)
 {
 	Pilha *p = (Pilha*)malloc(sizeof(Pilha));
 	p = cria_pilha();
-	char var[ ] = "a";
-	push_pilha(p, var);
-	printf("%s\n", p->topo->a);
-	printf("%c\n", pop_pilha(p));
+	char var[10] = "2+3*7";
+	
+	for (int i = 0; i < strlen(var); ++i)
+	{
+		push_pilha(p, &var[i]);
+	}
+	printf("%s\n", pop_pilha(p));
 	system("pause");
 	return 0;
 }
