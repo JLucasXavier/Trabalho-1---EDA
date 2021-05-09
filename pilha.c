@@ -1,19 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct dado Dado;
-struct dado
-{
-    char a[2];
-    Dado *prox;
-};
-
-typedef struct pilha Pilha;
-struct pilha
-{
-    Dado *topo;
-};
+#include "pilha.h"
 
 Pilha *cria_pilha(){
     Pilha *p = (Pilha*)malloc(sizeof(Pilha));
@@ -54,14 +42,14 @@ char pop_pilha(Pilha *p){
     return a;
 }
 
-void monta_shuting_yard(Pilha* saida, Pilha *operador){
-	char var[] = "((a*b)-(c*d))/(e*f)";
+void monta_shuting_yard(Pilha* saida, Pilha *operador,char var[],int *tam){
     for (int i = 0; i < strlen(var); ++i)
     {
     	if (var[i] == '+' || var[i] == '-' || var[i] == '*' || var[i] == '/')
     	{
     		if (operador->topo != NULL && ((var[i] == '+') || (var[i] == '-' && (*(operador->topo->a) == '*' || *(operador->topo->a) == '/') ) || (var[i] == '*' && *(operador->topo->a) == '/') ) )
     		{
+    		    *tam=*tam+1;
     			push_pilha(saida, pop_pilha(operador));
     		}
     		
@@ -76,12 +64,14 @@ void monta_shuting_yard(Pilha* saida, Pilha *operador){
     	else if (var[i] == ')'){
     		while(*(operador->topo->a) != '('){
     			push_pilha(saida, pop_pilha(operador));
+    			*tam=*tam+1;
     		}
     		pop_pilha(operador);
     	}
 
     	else{
     		push_pilha(saida, var[i]);
+    		*tam=*tam+1;
     	}
     }
     while(operador->topo != NULL){
@@ -91,16 +81,11 @@ void monta_shuting_yard(Pilha* saida, Pilha *operador){
     	}
     	else{
     		push_pilha(saida, pop_pilha(operador));
+    		*tam=*tam+1;
     	}
     }
+    
 }
-
-//void esvaziar_pilha(Pilha *num){
-//	for (int i = 0; num->topo != NULL; ++i)
-//	{
-//		printf("%c\n", pop_pilha(num));
-//	}
-//}
 
 void pilha_libera(Pilha *p){
 	Dado *d, *q = p->topo;
@@ -110,16 +95,4 @@ void pilha_libera(Pilha *p){
 		q = d;
 	}
 	free(p);
-}
-
-int main(void){
-    Pilha *num = (Pilha*)malloc(sizeof(Pilha));
-    num = cria_pilha();
-    Pilha *operador = (Pilha*)malloc(sizeof(Pilha));
-    operador = cria_pilha();
-
-    monta_shuting_yard(num, operador);
-    //esvaziar_pilha(num);
-    system("pause");
-    return 0;
 }
