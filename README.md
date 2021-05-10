@@ -6,7 +6,6 @@ Alunos:
 <br/>José Lucas Teixeira Xavier (1921254)
 
 Expressões que o programa rodou corretamente:
-
 <br/>:one: 3 + 2 x 3 :heavy_check_mark:
 <br/>:two: 10 x 2 – 2 x 5 :x:
 <br/>:three: 7 + 3 ÷ 2 :heavy_check_mark:
