@@ -1,9 +1,9 @@
   # TRABALHO 1 - INF1010
 ## Calculando Expressões Matemáticas
 
-Alunos:
-<br/>Alexandre Rodrigues Bomfim Junior (1921241)
-<br/>José Lucas Teixeira Xavier (1921254)
+Integrantes do trabalho:
+<br/>:man_technologist: Alexandre Rodrigues Bomfim Junior (1921241)
+<br/>:man_technologist: José Lucas Teixeira Xavier (1921254)
 
 Expressões que o programa rodou corretamente:
 <br/>:one: 3 + 2 x 3 :heavy_check_mark:
