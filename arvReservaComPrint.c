@@ -2,21 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct arvBin {
+typedef struct arvBin{
     char info;
     struct arvBin* esq;
     struct arvBin* dir;
     struct arvBin* pai;
 }ArvBin;
 
-
-int arv_vazia (ArvBin* a)
-{
-    return a==NULL;
+int arv_vazia (ArvBin* arvore){
+    return arvore==NULL;
 }
 
-ArvBin* arv_cria (char c, ArvBin* sae, ArvBin* sad,ArvBin* pai)
-{
+ArvBin* arv_cria (char c, ArvBin* sae, ArvBin* sad,ArvBin* pai){
     ArvBin* p=(ArvBin*)malloc(sizeof(ArvBin));
     if(p==NULL) exit(1);
     p->info = c;
@@ -26,36 +23,40 @@ ArvBin* arv_cria (char c, ArvBin* sae, ArvBin* sad,ArvBin* pai)
     return p;
 }
 
-ArvBin* arv_libera (ArvBin* a){
-    if (!arv_vazia(a)){
-        arv_libera(a->esq); /* libera sae */
-        arv_libera(a->dir); /* libera sad */
-        free(a); /* libera raiz */
+ArvBin* arv_libera (ArvBin* arvore){
+    if (!arv_vazia(arvore)){
+        arv_libera(arvore->esq);
+        arv_libera(arvore->dir);
+        arv_libera(arvore->pai);
+        free(arvore);
     }
     return NULL;
 }
 
-void arv_imprime (ArvBin* a)
-{
-    if (!arv_vazia(a)){
-        printf("(%c ",a->info); 
-        arv_imprime(a->esq); 
-        arv_imprime(a->dir); 
+void arv_imprime (ArvBin* arvore){
+    if (!arv_vazia(arvore)){
+        printf("(%c ",arvore->info); 
+        arv_imprime(arvore->esq); 
+        arv_imprime(arvore->dir); 
         printf(")");
     }
     else
         printf("() ");
 }
 
-void arv_percurso_posordem (ArvBin* a)
-{
-    if (!arv_vazia(a)){
-        arv_percurso_posordem(a->esq);
-        arv_percurso_posordem(a->dir);
-        printf("%c ",a->info);
+int calcular_expressao(ArvBin* arvore){
+    if(arvore->info=='+'){
+        return calcular_expressao(arvore->esq) + calcular_expressao(arvore->dir);
+    }else if(arvore->info=='-'){
+        return calcular_expressao(arvore->esq) - calcular_expressao(arvore->dir);
+    }else if(arvore->info=='*'){
+        return calcular_expressao(arvore->esq) * calcular_expressao(arvore->dir);
+    }else if(arvore->info=='/'){
+        return calcular_expressao(arvore->esq) / calcular_expressao(arvore->dir);
+    }else{
+        return (arvore->info)-'0';
     }
 }
-
 
 void arvore_expressao(char expressao[]){
     ArvBin* arvore = arv_cria(expressao[strlen(expressao)-1],NULL,NULL,NULL);
@@ -69,8 +70,8 @@ void arvore_expressao(char expressao[]){
                 //printf("no da direita: %c\n",arvore->dir->info);
                 i--;
                 atual=arvore->dir;
-                printf("no atual: %c pai do no atual: %c\n",atual->info,atual->pai->info);
-                printf("no da direita: %c %c\n",arvore->dir->info,arvore->dir->pai->info);
+                //printf("no atual: %c pai do no atual: %c\n",atual->info,atual->pai->info);
+                //printf("no da direita: %c %c\n",arvore->dir->info,arvore->dir->pai->info);
             }else{
                 atual->dir=arv_cria(expressao[i],NULL,NULL,atual);
                 //printf("no da direita: %c\n",arvore->dir->info);
@@ -106,12 +107,8 @@ void arvore_expressao(char expressao[]){
         
     }
     arv_imprime(arvore);
-    printf("\n");
-    arv_imprime(atual);
+    printf("\no resultado da expressão é %d",calcular_expressao(arvore));
 }
-
-
-
 
 int main(void){
     char exp[] ="2384-*+";
